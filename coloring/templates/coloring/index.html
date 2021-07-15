@@ -72,7 +72,7 @@
 			function createColorPalette(colors){
 
 				// create a swatch for each color
-				for (var i = colors.length - 1; i >= 0; i--) {
+				for (var i = 0; i <= 8; i++) {
 					var $swatch = $("<div>").css("background-color", colors[i])
 									   .addClass("swatch");
 					$swatch.click(function(){
@@ -88,8 +88,36 @@
 				cp.$container.html(" ");
 				$.getJSON('/static/coloring/vendors/material/material-colors.json', function(colors){
 					var keys = Object.keys(colors);
-					for (var i = keys.length - 1; i >= 0; i--) {
-						cp.options.push(colors[keys[i]][500]);
+					for (var i = 0; i <= 8; i++) {
+						var colorIndex = 0;
+						if (i == 0) {
+							colorIndex = 0;
+						}
+						if (i == 1) {
+							colorIndex = 14;
+						}
+						if (i == 2) {
+							colorIndex = 12;
+						}
+						if (i == 3) {
+							colorIndex = 10;
+						}
+						if (i == 4) {
+							colorIndex = 5;
+						}
+						if (i == 5) {
+							colorIndex = 2;
+						}
+						if (i == 6) {
+							colorIndex = 3;
+						}
+						if (i == 7) {
+							colorIndex = 1;
+						}
+						if (i == 8) {
+							colorIndex = 17;
+						}
+						cp.options.push(colors[keys[colorIndex]][500]);
 					}
 					createColorPalette(cp.options);
 				});
