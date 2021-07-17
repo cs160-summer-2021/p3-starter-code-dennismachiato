@@ -11,21 +11,22 @@
 
 	<style type="text/css">
 		#color-palette {
-			width: 300px;
+			width: 3000px;
 			background-color: #f1f1f1;
 			display: flex;
 			flex-wrap: wrap;
 			position: absolute;
 			top: 0;
+			margin-left:485px;
 		}
 
 		.swatch {
-			width: 24px;
-			height: 24px;
+			width: 50px;
+			height: 50px;
 			-moz-border-radius: 12px;
 			-webkit-border-radius: 12px;
-			border-radius: 12px;
-			margin: 3px;
+			border-radius: 120px;
+			margin: 10px;
 		}
 
 		#myCanvas {
@@ -33,8 +34,29 @@
 		    padding-right: 0;
 		    margin-left: auto;
 		    margin-right: auto;
-		    display: block;
+		    display:block;
 		}
+		
+		#sidebar {
+			width:300px;
+			height:50px;
+			background-color:yellow;
+			margin-top:-100px;
+			float:right;
+		}
+		#smol_sidebar {
+			width:50px;
+			height:50px;
+			background-color:yellow;
+			margin-top:-100px;
+			float:right;
+		}
+		
+		.images {
+			width:35px;
+			height:35px;
+		}
+		
 	</style>
 
 	<script type="text/javascript" canvas="canvas">
@@ -55,6 +77,8 @@
 				$container: $('#color-palette')
 			}
 
+			var eraser_click = false;
+
 			function myCustomInteraction() {
 				var tool = new paper.Tool();
 
@@ -74,10 +98,10 @@
 				// create a swatch for each color
 				for (var i = 0; i <= 8; i++) {
 					var $swatch = $("<div>").css("background-color", colors[i])
-									   .addClass("swatch");
+									.addClass("swatch");
 					$swatch.click(function(){
 						// add color to the color palette history
-					  	cp.history.push($(this).css("background-color"));
+						cp.history.push($(this).css("background-color"));
 					});
 					cp.$container.append($swatch);
 				}
@@ -117,7 +141,11 @@
 						if (i == 8) {
 							colorIndex = 17;
 						}
-						cp.options.push(colors[keys[colorIndex]][500]);
+						if (i == 9) {
+							cp.options.push("#FFFFFF");
+						} else {
+							cp.options.push(colors[keys[colorIndex]][500]);
+						}
 					}
 					createColorPalette(cp.options);
 				});
@@ -139,15 +167,54 @@
 
 				});
 			}
+			$(document).ready(function () {
+				
+				$("#sidebar_arrow").click(function() {
+					$('#sidebar').toggle();
+					$('#smol_sidebar').toggle();
+				});
+				$("#smol_sidebar_arrow").click(function() {
+					$('#sidebar').toggle();
+					$('#smol_sidebar').toggle();
+				});
+				$("#eraser").click(function() {
+					cp.history.push("#FFFFFF");
+					eraser_click = true;
+				});
+				$("#paint_brush").click(function() {
+					if (eraser_click == true) {
+						if (cp.history.length >= 2) {
+							cp.history.push(cp.history[cp.history.length - 2]);
+						}
+						eraser_click = false;
+					}
+				});
+			});
 
 			// Set up the mandala interactivity.
 			init(true);
 		}
+
+		
 	</script>
 </head>
 <body>
 
 	<canvas id="myCanvas" width="750px" height="750px"></canvas>
 	<div id="color-palette"></div>
+	<div id="sidebar">
+		<img class="images" type="button" id="sidebar_arrow" value="click me" src="/static/coloring/images/Arrow_Right.PNG"></img>
+		<svg xmlns="http://www.w3.org/2000/svg" class="images" id="eraser" fill="currentColor" class="bi bi-eraser" viewBox="0 0 16 16">
+			<path d="M8.086 2.207a2 2 0 0 1 2.828 0l3.879 3.879a2 2 0 0 1 0 2.828l-5.5 5.5A2 2 0 0 1 7.879 15H5.12a2 2 0 0 1-1.414-.586l-2.5-2.5a2 2 0 0 1 0-2.828l6.879-6.879zm2.121.707a1 1 0 0 0-1.414 0L4.16 7.547l5.293 5.293 4.633-4.633a1 1 0 0 0 0-1.414l-3.879-3.879zM8.746 13.547 3.453 8.254 1.914 9.793a1 1 0 0 0 0 1.414l2.5 2.5a1 1 0 0 0 .707.293H7.88a1 1 0 0 0 .707-.293l.16-.16z"/>
+		  </svg>
+		  <img class="images" type="button" id="paint_brush" value="click me" src="/static/coloring/images/Paint_Brush.PNG"></img>
+		  <img class="images" type="button" id="save" value="click me" src="/static/coloring/images/Save.PNG"></img>
+		  <img class="images" type="button" id="back_arrow" value="click me" src="/static/coloring/images/back-arrow.PNG"></img>
+		  <img class="images" type="button" id="forward_arrow" value="click me" src="/static/coloring/images/forward-arrow.PNG"></img>
+		  <img class="images" type="button" id="trash" value="click me" src="/static/coloring/images/trash.PNG"></img>
+	</div>
+	<div id="smol_sidebar" style="display:none">
+		<img class="images" type="button" id="smol_sidebar_arrow" value="click me" src="/static/coloring/images/Arrow_Right.PNG"></img>
+	</div>
 </body>
 </html>
