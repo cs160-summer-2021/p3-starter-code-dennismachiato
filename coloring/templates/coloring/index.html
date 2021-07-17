@@ -12,12 +12,12 @@
 	<style type="text/css">
 		#color-palette {
 			width: 3000px;
-			background-color: #f1f1f1;
+			background-color:transparent;
 			display: flex;
 			flex-wrap: wrap;
 			position: absolute;
 			top: 0;
-			margin-left:485px;
+			margin-left:450px;
 		}
 
 		.swatch {
@@ -27,6 +27,38 @@
 			-webkit-border-radius: 12px;
 			border-radius: 120px;
 			margin: 10px;
+		}
+
+		#palette_arrow_right {
+			width: 40px;
+			height: 40px;
+			-moz-border-radius: 12px;
+			-webkit-border-radius: 12px;
+			border-radius: 120px;
+			margin: 10px;
+			display:block;
+			display: flex;
+			flex-wrap: wrap;
+			position: absolute;
+			margin-top:-742px;
+			margin-left:1100px;
+
+		}
+
+		#palette_arrow_left {
+			width: 40px;
+			height: 40px;
+			-moz-border-radius: 12px;
+			-webkit-border-radius: 12px;
+			border-radius: 120px;
+			margin: 10px;
+			display:block;
+			display: flex;
+			flex-wrap: wrap;
+			position: absolute;
+			margin-top:-742px;
+			margin-left:395px;
+
 		}
 
 		#myCanvas {
@@ -78,6 +110,8 @@
 			}
 
 			var eraser_click = false;
+			var li = [9];
+			//var mandala_list = 
 
 			function myCustomInteraction() {
 				var tool = new paper.Tool();
@@ -99,6 +133,7 @@
 				for (var i = 0; i <= 8; i++) {
 					var $swatch = $("<div>").css("background-color", colors[i])
 									.addClass("swatch");
+					li[i] = colors[i];
 					$swatch.click(function(){
 						// add color to the color palette history
 						cp.history.push($(this).css("background-color"));
@@ -139,10 +174,7 @@
 							colorIndex = 1;
 						}
 						if (i == 8) {
-							colorIndex = 17;
-						}
-						if (i == 9) {
-							cp.options.push("#FFFFFF");
+							cp.options.push("#000000");
 						} else {
 							cp.options.push(colors[keys[colorIndex]][500]);
 						}
@@ -189,6 +221,46 @@
 						eraser_click = false;
 					}
 				});
+				$("#save").click(function() {
+					alert("Your drawing has been saved.");
+				});
+				$("#back_arrow").click(function() {
+					mandala.item.fillColor = "#FFFFFF";
+					//mandala.lastClicked.item.fillColor = "#FFFFFF";
+				});
+				$("#trash").click(function() {
+					
+					mandala.item.fillColor = "#FFFFFF";
+				});
+
+				$("#palette_arrow_right").click(function() {
+					cp.$container.empty();
+					for (var i = 0; i <= 8; i++) {
+						var $swatch = $("<div>").css("background-color", "#" + ((1<<24) * Math.random() | 0).toString(16))
+										.addClass("swatch");
+						$swatch.click(function(){
+							// add color to the color palette history
+							cp.history.push($(this).css("background-color"));
+						});
+						cp.$container.append($swatch);
+					}
+
+				});
+
+				$("#palette_arrow_left").click(function() {
+					cp.$container.empty();
+					for (var i = 0; i <= 8; i++) {
+						var $swatch = $("<div>").css("background-color", li[i])
+										.addClass("swatch");
+						$swatch.click(function(){
+							// add color to the color palette history
+							cp.history.push($(this).css("background-color"));
+						});
+						cp.$container.append($swatch);
+					}
+
+				});
+				
 			});
 
 			// Set up the mandala interactivity.
@@ -201,7 +273,12 @@
 <body>
 
 	<canvas id="myCanvas" width="750px" height="750px"></canvas>
-	<div id="color-palette"></div>
+	<div>
+		<div id="color-palette"></div>
+		<img class="images" type="button" id="palette_arrow_right" value="click me" src="/static/coloring/images/Arrow_Right.PNG"></img>
+		<img class="images" type="button" id="palette_arrow_left" value="click me" src="/static/coloring/images/left-arrow.PNG"></img>
+	</div>
+	
 	<div id="sidebar">
 		<img class="images" type="button" id="sidebar_arrow" value="click me" src="/static/coloring/images/Arrow_Right.PNG"></img>
 		<svg xmlns="http://www.w3.org/2000/svg" class="images" id="eraser" fill="currentColor" class="bi bi-eraser" viewBox="0 0 16 16">
@@ -214,7 +291,7 @@
 		  <img class="images" type="button" id="trash" value="click me" src="/static/coloring/images/trash.PNG"></img>
 	</div>
 	<div id="smol_sidebar" style="display:none">
-		<img class="images" type="button" id="smol_sidebar_arrow" value="click me" src="/static/coloring/images/Arrow_Right.PNG"></img>
+		<img class="images" type="button" id="smol_sidebar_arrow" value="click me" src="/static/coloring/images/left-arrow.PNG"></img>
 	</div>
 </body>
 </html>
