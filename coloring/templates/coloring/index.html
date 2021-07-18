@@ -11,13 +11,15 @@
 
     <style type="text/css">
         #color-palette {
-            width: 3000px;
+            width: 70px;
+
             background-color:transparent;
             display: flex;
             flex-wrap: wrap;
             position: absolute;
             top: 0;
-            margin-left:450px;
+            margin-left:10px;
+			margin-top: 80px;
         }
 
         .swatch {
@@ -40,8 +42,9 @@
             display: flex;
             flex-wrap: wrap;
             position: absolute;
-            margin-top:-742px;
-            margin-left:1100px;
+            margin-top:-50px;
+            margin-left:25px;
+			transform: rotate(90deg);
 
         }
 
@@ -56,9 +59,9 @@
             display: flex;
             flex-wrap: wrap;
             position: absolute;
-            margin-top:-742px;
-            margin-left:395px;
-
+            margin-top: -720px;
+            margin-left: 25px;
+			transform: rotate(90deg);
         }
 
         #myCanvas {
@@ -72,22 +75,29 @@
         #sidebar {
             width:300px;
             height:50px;
-            background-color:yellow;
-            margin-top:-100px;
+            background-color:#EFDCBE;
+            margin-top:-30px;
             float:right;
+			border-radius: 30px;
         }
+
         #smol_sidebar {
             width:50px;
             height:50px;
-            background-color:yellow;
-            margin-top:-100px;
+            background-color:#EFDCBE;
+            margin-top:-30px;
             float:right;
+			border-radius: 30px;
         }
         
         .images {
             width:35px;
             height:35px;
+			margin-top: 7px;
+			margin-left: 3px;
         }
+
+
         
     </style>
 
@@ -109,7 +119,18 @@
                 $container: $('#color-palette')
             }
 
+            var last_state = {
+                history: ["#FFFFFF"],
+                hit: [null]
+            }
+            var forward_state = {
+                history: ["#FFFFFF"],
+                hit: [null]
+            }
+
             var eraser_click = false;
+            var i = -1;
+            var j = -1;
             var li = [9];
             //var mandala_list = 
 
@@ -121,7 +142,18 @@
                     if (hit) {
                             // Color pallette keeps track of the full history of colors, though we
                             // only color in with the most-recent color.
+                        if (i < last_state.hit.length - 2) {
+                            last_state.hit = last_state.hit.splice(1, i + 2);
+                            last_state.history = last_state.history.splice(1, i + 2);
+                        }
+                        last_state.history.push(hit.item.fillColor);
+                        last_state.hit.push(hit);
+                        i += 1;
+                        forward_state.hit = [null];
+                        forward_state.history = ["#FFFFFF"];
                         hit.item.fillColor = cp.history[cp.history.length - 1];
+                        
+                        
                     }
                 }
             }
@@ -223,10 +255,26 @@
                 });
                 $("#save").click(function() {
                     alert("Your drawing has been saved.");
+					window.location.href = "http://localhost:8000/coloring/home";
                 });
                 $("#back_arrow").click(function() {
-                    mandala.item.fillColor = "#FFFFFF";
-                    //mandala.lastClicked.item.fillColor = "#FFFFFF";
+                    if (i >= 0) {
+                        var pass = true;
+                        
+                        
+                        forward_state.history.push(last_state.hit[i + 1].item.fillColor);
+                        forward_state.hit.push(last_state.hit[i + 1]);
+                        last_state.hit[i + 1].item.fillColor = last_state.history[i + 1];
+                        i -= 1;
+                        j += 1;
+                    }
+                });
+                $("#forward_arrow").click(function() {
+                    if (j >= 0) {
+                        forward_state.hit[j + 1].item.fillColor = forward_state.history[j + 1];
+                        j -= 1;
+                        i += 1;
+                    }
                 });
                 $("#trash").click(function() {
                     
@@ -273,7 +321,7 @@
 <body>
 
     <canvas id="myCanvas" width="750px" height="750px"></canvas>
-    <div>
+    <div id="color-bar">
         <div id="color-palette"></div>
         <img class="images" type="button" id="palette_arrow_right" value="click me" src="/static/coloring/images/Arrow_Right.PNG"></img>
         <img class="images" type="button" id="palette_arrow_left" value="click me" src="/static/coloring/images/left-arrow.PNG"></img>

@@ -36,11 +36,14 @@
             height: 362px;
 
             background: #FFFFFF;
+            outline: none;
             border-radius: 30px;
 			background-color:white;
             text-align: center;
             justify-content: center;
             align-items: center;
+            margin-left: 40px;
+            margin-right: 40px;
 		}
 
         .home-title {
@@ -82,6 +85,11 @@
             color: #000000;
         }
 
+        button {
+            outline: none;
+            /* border-color: #FFFFFF; */
+        }
+
 	</style>
 	<body>
 		<!-- Your layout here -->
@@ -89,23 +97,23 @@
 			<div class="home-title"> Welcome back Oliver!</div>
 		</div>
 		<div class="flexbox-container">
-			<div class="container">
+			<button class="container" onClick="window.location.href='http://localhost:8000/coloring/new_interaction';">
                 <img src="../static/coloring/images/mandala-freepik-simple.jpg">
-            </div>
-			<div class="container">
+            </button>
+			<button class="container">
                 <img src="../static/coloring/images/coloring-flowers-and-leaves.jpg">
-            </div>
-			<div class="container">
+            </button>
+			<button class="container">
                 <img src="../static/coloring/images/coloring-mermaid-in-waves.jpg">
-            </div>
+            </button>
 		</div>
 		<div class="flexbox-container">
-			<div class="container">
+			<button class="container">
                 <img src="../static/coloring/images/coloring-page-heart-dreamcatcher.jpg">
-            </div>
-			<div class="container">
+            </button>
+			<button class="container">
                 <img src="../static/coloring/images/coloring-page-incredible-turtle.jpg">
-            </div>
+            </button>
 			<div class="container">
                 <div class="upload-search">
                     Upload your own template here:
